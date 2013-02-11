@@ -31,12 +31,12 @@ if ( typeof Publisher == 'undefined') {
 
 	Publisher = function() {
 
-		var topics = [];
+		var topics = new Array();
 
 		this.Get = function(topic) {
-			var value = topics[topic];
+			var value = this[topic];
 			if (!value) {
-				value = topics[topic] = [];
+				value = this[topic] = [];
 			}
 			return value;
 		};

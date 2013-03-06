@@ -153,6 +153,14 @@ GeoTemCoLoader = {
 			url : GeoTemCoLoader.urlPrefix + 'js/Util/Publisher.js',
 		}, {
 			url : GeoTemCoLoader.urlPrefix + 'js/Util/WidgetWrapper.js',
+		}, {
+			url : GeoTemCoLoader.urlPrefix + 'js/Dataloader/' + 'DataloaderConfig.js',
+		}, {
+			url : GeoTemCoLoader.urlPrefix + 'js/Dataloader/' + 'DataloaderGui.js',
+		}, {
+			url : GeoTemCoLoader.urlPrefix + 'js/Dataloader/' + 'DataloaderWidget.js',
+		}, {
+			url : GeoTemCoLoader.urlPrefix + 'js/Dataloader/' + 'Dataloader.js',
 		}];
 		(new DynaJsLoader()).loadScripts(geoTemCoFiles, GeoTemCoLoader.initGeoTemCo);
 

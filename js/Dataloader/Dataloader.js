@@ -75,7 +75,7 @@ Dataloader.prototype = {
 			if (kml != null) {
 				var dataSet = new Dataset(GeoTemConfig.loadKml(kml));
 				
-				if (dataset != null) {
+				if (dataSet != null) {
 					$(this.parent.attachedWidgets).each(function(){
 						if ($.inArray(dataSet, this.datasets) == -1)
 								this.datasets.push(dataSet);

@@ -62,7 +62,26 @@ GeoTemCoLoader = {
 		if (typeof jQuery == 'undefined') {
 			(new DynaJsLoader()).loadScripts([{
 				url : GeoTemCoLoader.urlPrefix + 'lib/jquery/jquery.min.js'
-			}],GeoTemCoLoader.loadTimeplot);
+			}],GeoTemCoLoader.loadJSZip);
+		}
+		else {
+			GeoTemCoLoader.loadJSZip();
+		}
+	},
+	
+	loadJSZip : function() {
+		if (typeof JSZip == 'undefined') {
+			var jsZipFiles = [{
+				url : GeoTemCoLoader.urlPrefix + 'lib/jszip/jszip.js'
+			}, {
+				url : GeoTemCoLoader.urlPrefix + 'lib/jszip/jszip-deflate.js',
+			}, {
+				url : GeoTemCoLoader.urlPrefix + 'lib/jszip/jszip-inflate.js'
+			}, {
+				url : GeoTemCoLoader.urlPrefix + 'lib/jszip/jszip-load.js',
+			}];
+			
+			(new DynaJsLoader()).loadScripts(jsZipFiles, GeoTemCoLoader.loadTimeplot);
 		}
 		else {
 			GeoTemCoLoader.loadTimeplot();

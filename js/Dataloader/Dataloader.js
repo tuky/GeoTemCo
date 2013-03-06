@@ -49,6 +49,7 @@ Dataloader.prototype = {
 	initialize : function() {
 
 		this.addKMLLoader();
+		this.addKMZLoader();
 		
 		// trigger change event on the select so 
 		// that only the first loader will be shown
@@ -86,5 +87,54 @@ Dataloader.prototype = {
 		},this));
 
 		$(this.parent.gui.loaders).append(this.KMLLoaderTab);
+	},
+	
+	addKMZLoader : function() {
+		$(this.parent.gui.loaderTypeSelect).append("<option value='KMZLoader'>KMZ File URL</option>");
+		
+		this.KMZLoaderTab = document.createElement("div");
+		$(this.KMZLoaderTab).attr("id","KMZLoader");
+		
+		this.kmzURL = document.createElement("input");
+		$(this.kmzURL).attr("type","text");
+		$(this.KMZLoaderTab).append(this.kmzURL);
+		
+		this.loadKMZButton = document.createElement("button");
+		$(this.loadKMZButton).text("load KMZ");
+		$(this.KMZLoaderTab).append(this.loadKMZButton);
+
+		$(this.loadKMZButton).click($.proxy(function(){
+	    	
+	    	var parent = this.parent;
+			
+			var kmzURL = $(this.kmzURL).val();
+		    var req = new XMLHttpRequest();
+		    req.open("GET",kmzURL,true);
+		    req.responseType = "arraybuffer";
+		    req.onload = function() {
+		    	var zip = new JSZip();
+		    	zip.load(req.response, {base64:false});
+		    	var kmlFiles = zip.file(new RegExp("kml$"));
+		    	
+		    	$(kmlFiles).each(function(){
+					var kml = this;
+					if (kml.data != null) {
+						var dataSet = new Dataset(GeoTemConfig.loadKml($.parseXML(kml.data)), kml.name);
+						
+						if (dataSet != null) {
+							$(parent.attachedWidgets).each(function(){
+								if ($.inArray(dataSet, this.datasets) == -1)
+										this.datasets.push(dataSet);
+								this.core.display(this.datasets);
+							});
+						}
+					}
+		    	});
+		    };
+		    req.send();
+
+		},this));
+
+		$(this.parent.gui.loaders).append(this.KMZLoaderTab);
 	}
 };

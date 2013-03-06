@@ -17,6 +17,7 @@
       </div>
     </noscript>
 
+	<div id="dataloaderContainerDiv" style="position:relative;"></div>
     <div id="mapContainerDiv" style="position:relative;"></div>
     <div id="plotContainerDiv" style="position:relative;"></div>
     <div id="tableContainerDiv" style="position:relative;"></div>
@@ -37,6 +38,14 @@
 		var tableDiv = document.getElementById("tableContainerDiv");
 		var table = new WidgetWrapper();
 		var tableWidget = new TableWidget(table,tableDiv);
+		
+		var dataloaderDiv = document.getElementById("dataloaderContainerDiv");
+		var dataloader = new WidgetWrapper();
+		var dataloaderWidget = new DataloaderWidget(dataloader,dataloaderDiv);
+		dataloaderWidget.attachWidget(mapWidget);
+		dataloaderWidget.attachWidget(timeWidget);
+		dataloaderWidget.attachWidget(tableWidget);
+
 		var kml1 = GeoTemConfig.getKml('data/heine.kml');
 		datasets.push(new Dataset(GeoTemConfig.loadKml(kml1),'Heinrich Heine'));
 		var kml2 = GeoTemConfig.getKml('data/kafka.kml');

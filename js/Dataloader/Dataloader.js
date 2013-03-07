@@ -72,6 +72,8 @@ Dataloader.prototype = {
 
 		$(this.loadKMLButton).click($.proxy(function(){
 			var kmlURL = $(this.kmlURL).val();
+			if (typeof this.options.proxy != 'undefined')
+				kmlURL = this.options.proxy + kmlURL;
 			var kml = GeoTemConfig.getKml(kmlURL);
 			if (kml != null) {
 				var dataSet = new Dataset(GeoTemConfig.loadKml(kml));
@@ -108,6 +110,8 @@ Dataloader.prototype = {
 	    	var parent = this.parent;
 			
 			var kmzURL = $(this.kmzURL).val();
+			if (typeof this.options.proxy != 'undefined')
+				kmzURL = this.options.proxy + kmzURL;
 		    var req = new XMLHttpRequest();
 		    req.open("GET",kmzURL,true);
 		    req.responseType = "arraybuffer";
@@ -136,5 +140,38 @@ Dataloader.prototype = {
 		},this));
 
 		$(this.parent.gui.loaders).append(this.KMZLoaderTab);
+	},
+	
+	addLocalKMLLoader : function() {
+		$(this.parent.gui.loaderTypeSelect).append("<option value='LocalKMLLoader'>local KML File</option>");
+		
+		this.localKMLLoaderTab = document.createElement("div");
+		$(this.localKMLLoaderTab).attr("id","LocalKMLLoader");
+		
+		this.kmlURL = document.createElement("input");
+		$(this.kmlURL).attr("type","file");
+		$(this.localKMLLoaderTab).append(this.kmlURL);
+		
+		this.loadKMLButton = document.createElement("button");
+		$(this.loadKMLButton).text("load KML");
+		$(this.localKMLLoaderTab).append(this.loadKMLButton);
+
+		$(this.loadKMLButton).click($.proxy(function(){
+			var kmlURL = $(this.kmlURL).val();
+			var kml = GeoTemConfig.getKml(kmlURL);
+			if (kml != null) {
+				var dataSet = new Dataset(GeoTemConfig.loadKml(kml));
+				
+				if (dataSet != null) {
+					$(this.parent.attachedWidgets).each(function(){
+						if ($.inArray(dataSet, this.datasets) == -1)
+								this.datasets.push(dataSet);
+						this.core.display(this.datasets);
+					});
+				}
+			}
+		},this));
+
+		$(this.parent.gui.loaders).append(this.KMLLoaderTab);
 	}
 };

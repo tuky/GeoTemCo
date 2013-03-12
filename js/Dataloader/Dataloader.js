@@ -50,6 +50,7 @@ Dataloader.prototype = {
 
 		this.addKMLLoader();
 		this.addKMZLoader();
+		this.addLocalKMLLoader();
 		
 		// trigger change event on the select so 
 		// that only the first loader will be shown
@@ -152,30 +153,40 @@ Dataloader.prototype = {
 		this.localKMLLoaderTab = document.createElement("div");
 		$(this.localKMLLoaderTab).attr("id","LocalKMLLoader");
 		
-		this.kmlURL = document.createElement("input");
-		$(this.kmlURL).attr("type","file");
-		$(this.localKMLLoaderTab).append(this.kmlURL);
+		this.kmlFile = document.createElement("input");
+		$(this.kmlFile).attr("type","file");
+		$(this.localKMLLoaderTab).append(this.kmlFile);
 		
-		this.loadKMLButton = document.createElement("button");
-		$(this.loadKMLButton).text("load KML");
-		$(this.localKMLLoaderTab).append(this.loadKMLButton);
+		this.loadLocalKMLButton = document.createElement("button");
+		$(this.loadLocalKMLButton).text("load KML");
+		$(this.localKMLLoaderTab).append(this.loadLocalKMLButton);
 
-		$(this.loadKMLButton).click($.proxy(function(){
-			var kmlURL = $(this.kmlURL).val();
-			var kml = GeoTemConfig.getKml(kmlURL);
-			if (kml != null) {
-				var dataSet = new Dataset(GeoTemConfig.loadKml(kml));
+		$(this.loadLocalKMLButton).click($.proxy(function(){
+			var filelist = $(this.kmlFile).get(0).files;
+			if (filelist.length > 0){
+				var file = filelist[0];
+				var fileName = file.name;
+				var reader = new FileReader();
 				
-				if (dataSet != null) {
-					$(this.parent.attachedWidgets).each(function(){
-						if ($.inArray(dataSet, this.datasets) == -1)
-								this.datasets.push(dataSet);
-						this.core.display(this.datasets);
-					});
-				}
+				reader.onloadend = ($.proxy(function(theFile) {
+			        return function(e) {
+						var dataSet = new Dataset(GeoTemConfig.loadKml($.parseXML(reader.result)), fileName);
+						if (dataSet != null) {
+							$(this.parent.attachedWidgets).each(function(){
+								if (!(this.datasets instanceof Array))
+									this.datasets = new Array();
+								if ($.inArray(dataSet, this.datasets) == -1)
+										this.datasets.push(dataSet);
+								this.core.display(this.datasets);
+							});
+						}					
+			        };
+			    }(file),this));
+
+				reader.readAsText(file);
 			}
 		},this));
 
-		$(this.parent.gui.loaders).append(this.KMLLoaderTab);
+		$(this.parent.gui.loaders).append(this.localKMLLoaderTab);
 	}
 };

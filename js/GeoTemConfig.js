@@ -320,6 +320,47 @@ GeoTemConfig.getKml = function(url,asyncFunc) {
 }
 
 /**
+ * returns an array of all xml dom object of the kmls 
+ * found in the zip file from the given url
+ * 
+ * can only be used with asyncFunc (because of browser 
+ * constraints regarding arraybuffer)
+ * 
+ * @param {String} url the url of the file to load
+ * @return xml dom object of given file
+ */
+GeoTemConfig.getKmz = function(url,asyncFunc) {
+	var kmlDom = new Array();
+
+	var async = true;
+	if( !asyncFunc ){
+		//if no asyncFunc is given return an empty array
+		return kmlDom;
+	}
+	
+	//use XMLHttpRequest as "arraybuffer" is not 
+	//supported in jQuery native $.get
+    var req = new XMLHttpRequest();
+    req.open("GET",url,async);
+    req.responseType = "arraybuffer";
+    req.onload = function() {
+    	var zip = new JSZip();
+    	zip.load(req.response, {base64:false});
+    	var kmlFiles = zip.file(new RegExp("kml$"));
+    	
+    	$(kmlFiles).each(function(){
+			var kml = this;
+			if (kml.data != null) {
+				kmlDom.push($.parseXML(kml.data));
+			}
+    	});
+    	
+    	asyncFunc(kmlDom);
+    };
+	req.send();
+};
+
+/**
  * returns the xml dom object of an kml created  
  * from the csv file from the given url
  * @param {String} url the url of the file to load

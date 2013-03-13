@@ -62,6 +62,8 @@ GeoTemCoLoader = {
 		if (typeof jQuery == 'undefined') {
 			(new DynaJsLoader()).loadScripts([{
 				url : GeoTemCoLoader.urlPrefix + 'lib/jquery/jquery.min.js'
+			},{
+				url : GeoTemCoLoader.urlPrefix + 'lib/jquery/purl.min.js'
 			}],GeoTemCoLoader.loadJSZip);
 		}
 		else {

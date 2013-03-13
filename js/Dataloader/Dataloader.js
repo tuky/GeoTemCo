@@ -56,7 +56,7 @@ Dataloader.prototype = {
 		this.addLocalCSVLoader();
 		
 		// trigger change event on the select so 
-		// that only the first loader will be shown
+		// that only the first loader div will be shown
 		$(this.parent.gui.loaderTypeSelect).change();
 	},
 	

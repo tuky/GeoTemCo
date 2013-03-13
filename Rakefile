@@ -9,6 +9,8 @@ task :default => :all
 
 task :all => [COMPRESSED_OUTPUT_FILE, OUTPUT_FILE, CSS_FILE]
 
+task :nice => [OUTPUT_FILE, CSS_FILE]
+
 # javascript sources
 Files = %w(lib/jquery/jquery.min.js
 js/Build/Minifier/basic.js

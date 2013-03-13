@@ -18992,6 +18992,7 @@ function MapGui(map, div, options, iid) {
 	//		}
 
 	this.resize = function() {
+		debugger;
 		var w = this.container.offsetWidth;
 		var h = this.container.offsetHeight;
 //		this.mapWindow.style.width = w + "px";
@@ -20700,6 +20701,8 @@ function TimeGui(plot, div, options, iid) {
 	setCanvas();
 
 	this.resize = function(){
+		alert("hallo!");
+		debugger;
 		gui.timeplotDiv.style.width = (gui.container.offsetWidth - 32) + "px";
 		ctx.clearRect(0,0,gui.plotWindow.clientWidth, gui.plotWindow.clientHeight);
 		if( typeof plot.datasets != "undefined" ){
@@ -22345,6 +22348,7 @@ function TableWidget(core, div, options) {
 TableWidget.prototype = {
 
 	initWidget : function(data) {
+		this.datasets = data;
 
 		$(this.gui.tabs).empty();
 		$(this.gui.input).empty();
@@ -22496,7 +22500,10 @@ TableWidget.prototype = {
 	},
 
 	filtering : function() {
-		this.core.triggerRefining(this.selection.objects);
+		for (var i = 0; i < this.datasets.length; i++) {
+			this.datasets[i].objects = this.selection.objects[i];
+		}
+		this.core.triggerRefining(this.datasets);
 	},
 
 	inverseFiltering : function() {
@@ -26080,6 +26087,7 @@ if ( typeof Publisher == 'undefined') {
 
 		this.Publish = function(topic, data, publisher) {
 			var subscribers = this.Get(topic);
+			debugger;
 			for (var i = 0; i < subscribers.length; i++) {
 				if (publisher == null || subscribers[i].client != publisher) {
 					subscribers[i].callback(data);
@@ -26184,6 +26192,7 @@ function WidgetWrapper() {
 	});
 
 	Publisher.Subscribe('resizeWidget', this, function() {
+		debugger;
 		if ( typeof wrapper.widget != 'undefined' && typeof wrapper.widget.gui != 'undefined' && typeof wrapper.widget.gui.resize != 'undefined' ) {
 			wrapper.widget.gui.resize();
 		}

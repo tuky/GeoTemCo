@@ -49,6 +49,7 @@ function TableWidget(core, div, options) {
 TableWidget.prototype = {
 
 	initWidget : function(data) {
+		this.datasets = data;
 
 		$(this.gui.tabs).empty();
 		$(this.gui.input).empty();
@@ -200,7 +201,10 @@ TableWidget.prototype = {
 	},
 
 	filtering : function() {
-		this.core.triggerRefining(this.selection.objects);
+		for (var i = 0; i < this.datasets.length; i++) {
+			this.datasets[i].objects = this.selection.objects[i];
+		}
+		this.core.triggerRefining(this.datasets);
 	},
 
 	inverseFiltering : function() {

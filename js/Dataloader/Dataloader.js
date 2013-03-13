@@ -51,7 +51,9 @@ Dataloader.prototype = {
 
 		this.addKMLLoader();
 		this.addKMZLoader();
+		this.addCSVLoader();
 		this.addLocalKMLLoader();
+		this.addLocalCSVLoader();
 		
 		// trigger change event on the select so 
 		// that only the first loader will be shown
@@ -133,6 +135,39 @@ Dataloader.prototype = {
 		$(this.parent.gui.loaders).append(this.KMZLoaderTab);
 	},
 	
+	addCSVLoader : function() {
+		$(this.parent.gui.loaderTypeSelect).append("<option value='CSVLoader'>CSV File URL</option>");
+		
+		this.CSVLoaderTab = document.createElement("div");
+		$(this.CSVLoaderTab).attr("id","CSVLoader");
+		
+		this.csvURL = document.createElement("input");
+		$(this.csvURL).attr("type","text");
+		$(this.CSVLoaderTab).append(this.csvURL);
+		
+		this.loadCSVButton = document.createElement("button");
+		$(this.loadCSVButton).text("load CSV");
+		$(this.CSVLoaderTab).append(this.loadCSVButton);
+
+		$(this.loadCSVButton).click($.proxy(function(){
+			var dataLoader = this;
+			
+			var csvURL = $(this.csvURL).val();
+			if (typeof this.options.proxy != 'undefined')
+				csvURL = this.options.proxy + csvURL;
+			GeoTemConfig.getCsv(csvURL, function(kml){
+				if (kml != null) {
+					var dataSet = new Dataset(GeoTemConfig.loadKml(kml));
+					
+					if (dataSet != null)
+						dataLoader.distributeDataset(dataSet);
+				}
+			});
+		},this));
+
+		$(this.parent.gui.loaders).append(this.CSVLoaderTab);
+	},	
+	
 	addLocalKMLLoader : function() {
 		$(this.parent.gui.loaderTypeSelect).append("<option value='LocalKMLLoader'>local KML File</option>");
 		
@@ -167,5 +202,42 @@ Dataloader.prototype = {
 		},this));
 
 		$(this.parent.gui.loaders).append(this.localKMLLoaderTab);
+	},
+	
+	addLocalCSVLoader : function() {
+		$(this.parent.gui.loaderTypeSelect).append("<option value='LocalCSVLoader'>local CSV File</option>");
+		
+		this.localCSVLoaderTab = document.createElement("div");
+		$(this.localCSVLoaderTab).attr("id","LocalCSVLoader");
+		
+		this.csvFile = document.createElement("input");
+		$(this.csvFile).attr("type","file");
+		$(this.localCSVLoaderTab).append(this.csvFile);
+		
+		this.loadLocalCSVButton = document.createElement("button");
+		$(this.loadLocalCSVButton).text("load CSV");
+		$(this.localCSVLoaderTab).append(this.loadLocalCSVButton);
+
+		$(this.loadLocalCSVButton).click($.proxy(function(){
+			var filelist = $(this.csvFile).get(0).files;
+			if (filelist.length > 0){
+				var file = filelist[0];
+				var fileName = file.name;
+				var reader = new FileReader();
+				
+				reader.onloadend = ($.proxy(function(theFile) {
+			        return function(e) {
+			        	var kml = GeoTemConfig.convertCsv(reader.result);
+						var dataSet = new Dataset(GeoTemConfig.loadKml($.parseXML(kml)), fileName);
+						if (dataSet != null)
+							this.distributeDataset(dataSet);			
+			        };
+			    }(file),this));
+
+				reader.readAsText(file);
+			}
+		},this));
+
+		$(this.parent.gui.loaders).append(this.localCSVLoaderTab);
 	}
 };

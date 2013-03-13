@@ -32,6 +32,7 @@ function Dataloader(parent) {
 	
 	this.parent = parent;
 	this.options = parent.options;
+	this.attachedWidgets = parent.attachedWidgets;
 
 	this.initialize();
 }
@@ -57,6 +58,16 @@ Dataloader.prototype = {
 		$(this.parent.gui.loaderTypeSelect).change();
 	},
 	
+	distributeDataset : function(dataSet) {
+		$(this.attachedWidgets).each(function(){
+			if (!(this.datasets instanceof Array))
+				this.datasets = new Array();
+			if ($.inArray(dataSet, this.datasets) == -1)
+					this.datasets.push(dataSet);
+			this.core.display(this.datasets);
+		});
+	},
+	
 	addKMLLoader : function() {
 		$(this.parent.gui.loaderTypeSelect).append("<option value='KMLLoader'>KML File URL</option>");
 		
@@ -79,15 +90,8 @@ Dataloader.prototype = {
 			if (kml != null) {
 				var dataSet = new Dataset(GeoTemConfig.loadKml(kml));
 				
-				if (dataSet != null) {
-					$(this.parent.attachedWidgets).each(function(){
-						if (!(this.datasets instanceof Array))
-							this.datasets = new Array();
-						if ($.inArray(dataSet, this.datasets) == -1)
-								this.datasets.push(dataSet);
-						this.core.display(this.datasets);
-					});
-				}
+				if (dataSet != null)
+					this.distributeDataset(dataSet);
 			}
 		},this));
 
@@ -110,38 +114,20 @@ Dataloader.prototype = {
 
 		$(this.loadKMZButton).click($.proxy(function(){
 	    	
-	    	var parent = this.parent;
+	    	var dataLoader = this;
 			
 			var kmzURL = $(this.kmzURL).val();
 			if (typeof this.options.proxy != 'undefined')
 				kmzURL = this.options.proxy + kmzURL;
-		    var req = new XMLHttpRequest();
-		    req.open("GET",kmzURL,true);
-		    req.responseType = "arraybuffer";
-		    req.onload = function() {
-		    	var zip = new JSZip();
-		    	zip.load(req.response, {base64:false});
-		    	var kmlFiles = zip.file(new RegExp("kml$"));
-		    	
-		    	$(kmlFiles).each(function(){
-					var kml = this;
-					if (kml.data != null) {
-						var dataSet = new Dataset(GeoTemConfig.loadKml($.parseXML(kml.data)), kml.name);
+			
+			GeoTemConfig.getKmz(kmzURL, function(kmlArray){
+		    	$(kmlArray).each(function(){
+					var dataSet = new Dataset(GeoTemConfig.loadKml(this));
 						
-						if (dataSet != null) {
-							$(parent.attachedWidgets).each(function(){
-								if (!(this.datasets instanceof Array))
-									this.datasets = new Array();
-								if ($.inArray(dataSet, this.datasets) == -1)
-										this.datasets.push(dataSet);
-								this.core.display(this.datasets);
-							});
-						}
-					}
+					if (dataSet != null)
+						dataLoader.distributeDataset(dataSet);
 		    	});
-		    };
-		    req.send();
-
+			});
 		},this));
 
 		$(this.parent.gui.loaders).append(this.KMZLoaderTab);
@@ -171,15 +157,8 @@ Dataloader.prototype = {
 				reader.onloadend = ($.proxy(function(theFile) {
 			        return function(e) {
 						var dataSet = new Dataset(GeoTemConfig.loadKml($.parseXML(reader.result)), fileName);
-						if (dataSet != null) {
-							$(this.parent.attachedWidgets).each(function(){
-								if (!(this.datasets instanceof Array))
-									this.datasets = new Array();
-								if ($.inArray(dataSet, this.datasets) == -1)
-										this.datasets.push(dataSet);
-								this.core.display(this.datasets);
-							});
-						}					
+						if (dataSet != null)
+							this.distributeDataset(dataSet);
 			        };
 			    }(file),this));
 

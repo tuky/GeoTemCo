@@ -81,6 +81,19 @@ GeoTemCoLoader = {
 				url : GeoTemCoLoader.urlPrefix + 'lib/jszip/jszip-load.js',
 			}];
 			
+			(new DynaJsLoader()).loadScripts(jsZipFiles, GeoTemCoLoader.loaduCSV);
+		}
+		else {
+			GeoTemCoLoader.loaduCSV();
+		}
+	},
+
+	loaduCSV : function() {
+		if (typeof CSV == 'undefined') {
+			var jsZipFiles = [{
+				url : GeoTemCoLoader.urlPrefix + 'lib/ucsv/ucsv-1.1.0-min.js',
+			}];
+			
 			(new DynaJsLoader()).loadScripts(jsZipFiles, GeoTemCoLoader.loadTimeplot);
 		}
 		else {

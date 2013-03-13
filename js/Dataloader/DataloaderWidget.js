@@ -83,5 +83,27 @@ DataloaderWidget.prototype = {
 	
 	attachWidget : function(widget) {
 		this.attachedWidgets.push(widget);
+	},
+	
+	loadFromURL : function() {
+		var dataLoaderWidget = this;
+		//using jQuery-URL-Parser (https://github.com/skruse/jQuery-URL-Parser)
+		$.each($.url().param(),function(paramName, paramValue){
+			//startsWith and endsWith defined in SIMILE Ajax (string.js)
+			var loaderFunction = null;
+			if (paramName.toLowerCase().startsWith("kml"))
+				loaderFunction = GeoTemConfig.getKml;
+			else if (paramName.toLowerCase().startsWith("csv"))
+				loaderFunction = GeoTemConfig.getCsv;
+			if (loaderFunction){
+				if (typeof dataLoaderWidget.options.proxy != 'undefined')
+					paramValue = dataLoaderWidget.options.proxy + paramValue;
+				loaderFunction(paramValue,function(kmlDoc){
+					var dataSet = new Dataset(GeoTemConfig.loadKml(kmlDoc), paramValue);
+					if (dataSet != null)
+						dataLoaderWidget.dataLoader.distributeDataset(dataSet);			
+				});
+			}
+		});
 	}
 };

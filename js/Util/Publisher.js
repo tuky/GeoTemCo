@@ -34,9 +34,9 @@ if ( typeof Publisher == 'undefined') {
 		var topics = new Array();
 
 		this.Get = function(topic) {
-			var value = this[topic];
-			if (!value) {
-				value = this[topic] = [];
+			var value = topics[topic];
+			if (!value || !(value instanceof Array)) {
+				value = topics[topic] = [];
 			}
 			return value;
 		};

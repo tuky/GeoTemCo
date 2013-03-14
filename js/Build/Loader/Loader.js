@@ -62,7 +62,41 @@ GeoTemCoLoader = {
 		if (typeof jQuery == 'undefined') {
 			(new DynaJsLoader()).loadScripts([{
 				url : GeoTemCoLoader.urlPrefix + 'lib/jquery/jquery.min.js'
-			}],GeoTemCoLoader.loadTimeplot);
+			},{
+				url : GeoTemCoLoader.urlPrefix + 'lib/jquery/purl.min.js'
+			}],GeoTemCoLoader.loadJSZip);
+		}
+		else {
+			GeoTemCoLoader.loadJSZip();
+		}
+	},
+	
+	loadJSZip : function() {
+		if (typeof JSZip == 'undefined') {
+			var jsZipFiles = [{
+				url : GeoTemCoLoader.urlPrefix + 'lib/jszip/jszip.js'
+			}, {
+				url : GeoTemCoLoader.urlPrefix + 'lib/jszip/jszip-deflate.js',
+			}, {
+				url : GeoTemCoLoader.urlPrefix + 'lib/jszip/jszip-inflate.js'
+			}, {
+				url : GeoTemCoLoader.urlPrefix + 'lib/jszip/jszip-load.js',
+			}];
+			
+			(new DynaJsLoader()).loadScripts(jsZipFiles, GeoTemCoLoader.loaduCSV);
+		}
+		else {
+			GeoTemCoLoader.loaduCSV();
+		}
+	},
+
+	loaduCSV : function() {
+		if (typeof CSV == 'undefined') {
+			var jsZipFiles = [{
+				url : GeoTemCoLoader.urlPrefix + 'lib/ucsv/ucsv-1.1.0-min.js',
+			}];
+			
+			(new DynaJsLoader()).loadScripts(jsZipFiles, GeoTemCoLoader.loadTimeplot);
 		}
 		else {
 			GeoTemCoLoader.loadTimeplot();
@@ -153,6 +187,14 @@ GeoTemCoLoader = {
 			url : GeoTemCoLoader.urlPrefix + 'js/Util/Publisher.js',
 		}, {
 			url : GeoTemCoLoader.urlPrefix + 'js/Util/WidgetWrapper.js',
+		}, {
+			url : GeoTemCoLoader.urlPrefix + 'js/Dataloader/' + 'DataloaderConfig.js',
+		}, {
+			url : GeoTemCoLoader.urlPrefix + 'js/Dataloader/' + 'DataloaderGui.js',
+		}, {
+			url : GeoTemCoLoader.urlPrefix + 'js/Dataloader/' + 'DataloaderWidget.js',
+		}, {
+			url : GeoTemCoLoader.urlPrefix + 'js/Dataloader/' + 'Dataloader.js',
 		}];
 		(new DynaJsLoader()).loadScripts(geoTemCoFiles, GeoTemCoLoader.initGeoTemCo);
 

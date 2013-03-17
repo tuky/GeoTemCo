@@ -111,6 +111,9 @@ Binning.prototype = {
 				}
 			}
 			var r = this.getMaxRadius(weight);
+			if (r < this.options.minimumRadius) {
+				r = this.options.minimumRadius;
+			}
 			if (r > this.maximumRadius) {
 				this.maximumRadius = r;
 				this.maximumPoints = weight;

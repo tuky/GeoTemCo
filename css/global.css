@@ -1,0 +1,274 @@
+@import url(http://fonts.googleapis.com/css?family=Droid+Sans:regular,bold&subset=latin);
+
+body {
+	margin: 0px;
+	font-family: "Droid Sans", verdana, arial, serif;
+	font-size: 14px;
+	color: #000000;
+}
+
+#uni {
+	position: absolute;
+	top: 25px;
+	left: 25px;
+}
+
+#bsv {
+	position: absolute;
+	top: 25px;
+	right: 25px;
+}
+
+a {
+	color: #0085ff;
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+a:active {
+	outline: none;
+}
+h1, h2, h3, h4, h5, h6 {
+	margin: 5px -5px;
+	padding: 1px 5px;
+	border-bottom: 1px solid;
+	line-height: normal;
+}
+h1 {
+	font-size: 36px;
+}
+h2 {
+	font-size: 30px;
+}
+h3 {
+	font-size: 24px;
+}
+h4 {
+	font-size: 20px;
+}
+h5 {
+	font-size: 16px;
+}
+h6 {
+	font-size: 14px;
+}
+blockquote {
+	padding: 20px 45px 20px 55px;
+	background: #F3F3F3 url(img/quote.png) 10px 10px no-repeat;
+	text-align: justify;
+	font-size: 12px;
+}
+
+h3 a {
+	font-size: 14px;
+	font-weight: normal;
+	float: right;
+}
+
+#preload {
+	display: none;
+}
+#header {
+	width: 800px;
+	height: 200px;
+	margin: 0 auto;
+	background-image: url(img/header-gtc.png);
+}
+#header a {
+	position: relative;
+	top: 50px;
+	left: 50px;
+	color: #FFFFFF;
+}
+#header a:hover {
+	text-decoration: none;
+}
+#header .small_text {
+	position: relative;
+	font-size: 16px;
+}
+
+#header_wings {
+	position: relative;
+	background-color: #414141;
+}
+
+#bg {
+	width: 80%;
+	min-width: 800px;
+	margin: 0 auto;
+	padding-bottom: 10px;
+	background: url(img/body-gtc.png) no-repeat;
+	background-position: top center;
+}
+#menu {
+	min-width: 800px;
+	text-align: center;
+	padding: 10px 0px;
+	font-size: 16px;
+}
+#menu ul {
+	display: inline-block;
+	height: 40px;
+	padding: 0;
+	margin: 0;
+}
+#menu ul li {
+	display: inline;
+}
+#menu ul li .inactive a {
+	margin: 0 5px;
+	padding: 0 10px;
+	color: #000000;
+	text-decoration: none;
+	line-height: 40px;
+	display: inline;
+	float: left;
+}
+#menu ul li .active a {
+	margin: 0 5px;
+	padding: 0 10px;
+	color: #0085ff;
+	background: #F3F3F3;
+	text-decoration: none;
+	line-height: 40px;
+	display: inline;
+	float: left;
+}
+#menu ul li a:hover {
+	background: #F3F3F3;
+}
+#inner_content {
+	position: relative;
+	z-index: 1;
+	margin: 0px 25px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+#content_full {
+	background: rgba(255, 255, 255, 0.5);
+	line-height: 150%;
+}
+#content_side {
+	width: 540px;
+	line-height: 150%;
+	float: left;
+}
+#overlay {
+	position: absolute;
+	margin: -10px 0px;
+	background-color: white;
+	opacity: 0.5;
+	z-index: 0;
+}
+#liveExample {
+	padding: 0px 0px;
+	line-height: 100%;
+}
+#side {
+	width: 230px;
+	line-height: 150%;
+	float: left;
+}
+#side.left {
+	padding: 10px 15px 10px 25px;
+	* padding: 15px 15px 25px 25px;
+}
+#side.right {
+	padding: 10px 25px 10px 15px;
+	* padding: 15px 25px 25px 15px;
+}
+#side .box {
+	margin: 15px -5px;
+	display: block;
+	float: none;
+}
+#side ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+#side ul li {
+	padding: 0 5px;
+	border-bottom: #E6E6E6 1px solid;
+	display: block;
+}
+#side ul li a {
+	width: 220px;
+	margin: 0 -5px;
+	padding: 2px 5px;
+	font-size: 12px;
+	text-decoration: none;
+	display: block;
+}
+#side ul li a:hover {
+	background: #F6F6F6;
+	color: #000000;
+	text-decoration: none;
+}
+#footer {
+	position: relative;
+	width: 100%;
+	min-width: 800px;
+	background-color: #414141;
+	font-size: 12px;
+	text-align: center;
+}
+
+#footer .copyright {
+	position: absolute;
+	bottom: 10px;
+	left: 10px;
+	color: #FFFFFF;
+	text-align: left;
+}
+
+#footer .links {
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	color: #FFFFFF;
+	text-align: right;
+}
+
+.logos {
+	width: 100%;
+}
+
+.logos td {
+	text-align: center;
+}
+
+.dswHeader {
+	padding-left: 10px;
+	padding-right: 20px;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	background-color: #878380;
+	opacity: 0.85;		
+	filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=85)";
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=85)";
+	border-spacing: 0px;
+	font-family: Calibri,Arial,sans-serif;
+	color: white;
+	font-size: 13px;
+	font-weight: bold;
+}
+
+.dswContent {
+	background-color: #DDDDDD;
+}
+
+.dswContent div {
+	display: inline-block;
+	padding: 10px;
+}
+
+#sortlist { list-style-type: none; margin: 0; padding: 0; text-align: left; }
+#sortlist li { margin: 0 3px 3px 3px; padding: 5px; padding-left: 15px; height: 18px; }
+#sortlist li span { position: absolute; margin-left: -15px; }
+
+a img {
+	border : 0 none;
+}

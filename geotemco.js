@@ -17159,6 +17159,7 @@ var Tooltips = {
 		"undoFilterSelection" : "Undo the last filter / inverse filter",
 		"cancelSelection" : "Discard the current selection (all items appear as deselected)",
 		"showSelectedHelp" : "Show only elements within the selection",
+		"selectByTextHelp" : "Select elements that contain the given text",
 		"showAllElementsHelp" : "Show all elements",
 		"paginationFirsPageHelp" : "Show first page",
 		"paginationPreviousPageHelp" : "Show previous page",
@@ -17246,6 +17247,7 @@ var Tooltips = {
 		"undoFilterSelection" : "Undo the last filter / inverse filter",
 		"cancelSelection" : "Discard the current selection (all items appear as deselected)",
 		"showSelectedHelp" : "Show only elements within the selection",
+		"selectByTextHelp" : "Select elements that contain the given text",
 		"showAllElementsHelp" : "Show all elements",
 		"paginationFirsPageHelp" : "Show first page",
 		"paginationPreviousPageHelp" : "Show previous page",
@@ -22506,6 +22508,7 @@ function TableConfig(options) {
 		tableSelectPage : true, // selection of complete table pages
 		tableSelectAll : false, // selection of complete tables
 		tableShowSelected : true, // show selected objects only option
+		tableSelectByText : true, // select objects by full-text search
 		unselectedCellColor : '#EEE' // color for an unselected row/tab
 	};
 	if ( typeof options != 'undefined') {
@@ -22962,6 +22965,28 @@ Table.prototype = {
 				table.update();
 			}
 		}
+		
+		if (table.options.tableSelectByText) {
+			this.selectByTextDiv = document.createElement('div');
+			//TODO: improve appearance (wrong margin)
+			$(this.selectByTextDiv).css("display", "inline-block");
+			//create and append the input field
+			this.selectByTextInput = document.createElement('input');
+			$(this.selectByTextInput).attr("type","text");
+			$(this.selectByTextDiv).append(this.selectByTextInput);
+			//create and append the button
+			this.selectByTextButton = document.createElement('input');
+			$(this.selectByTextButton).attr("type","button");
+			//TODO: add button-image
+			$(this.selectByTextButton).val("search");
+			$(this.selectByTextDiv).append(this.selectByTextButton);
+			
+			table.selectByTextDiv.title = GeoTemConfig.getString('selectByTextHelp');
+			selectors.appendChild(this.selectByTextDiv);
+			$(this.selectByTextButton).click($.proxy(function() {
+				this.selectByText($(this.selectByTextInput).val());
+			},this));
+		}		
 		this.selectors = selectors;
 
 		//		selectors.style.width = (this.filter.offsetWidth + this.selectAll.offsetWidth + this.selectPage.offsetWidth)+"px";
@@ -23141,6 +23166,22 @@ Table.prototype = {
 			return 1;
 		}
 		this.elements.sort(sortFunction);
+	},
+	
+	selectByText : function(text) {
+		//deselect all elements
+		$(this.elements).each(function(){
+			this.selected = false;
+		});
+		
+		$(this.elements).filter(function(index){
+			return this.object.contains(text);
+		}).each(function(){
+			this.selected = true;
+		});
+		
+		this.update();
+		this.parent.tableSelection();
 	},
 
 	setPagesText : function() {
@@ -23490,6 +23531,27 @@ function DataObject(name, description, locations, dates, weight, tableContent) {
 		}
 	};
 
+	this.contains = function(text) {
+		var allCombined = this.name + " " + this.description + " " + this.weight + " ";
+		
+		$.each(this.dates, function(key, value){
+			$.each(value, function(){
+				allCombined += this + " ";
+			});
+		});
+		
+		$.each(this.locations, function(key, value){
+			$.each(value, function(){
+				allCombined += this + " ";
+			});
+		});
+		
+		$.each(this.tableContent, function(key, value){
+			allCombined += value + " ";
+		});
+		
+		return (allCombined.indexOf(text) != -1);
+	};
 };
 /*
 * Dataset.js

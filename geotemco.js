@@ -20170,8 +20170,10 @@ MapWidget.prototype = {
 		}
 		this.zIndices[id] = this.layerZIndex;
 		this.layerZIndex += 2;
-		this.reset();
 		this.drawObjectLayer(false);
+		for( var i=0; i<this.polygons.length; i++ ){
+			this.objectLayer.addFeatures([this.polygons[i]]);
+		}
 	},
 
 	/**
@@ -24063,7 +24065,7 @@ Binning.prototype = {
 		this.zoomLevels = this.map.getNumZoomLevels();
 		this.binnings = [];
 		this.minimumRadius = this.options.minimumRadius;
-		this.maximumRadius = 0;
+		this.maximumRadius = this.minimumRadius;
 		this.maximumPoints = 0;
 		this.minArea = 0;
 		this.maxArea = 0;
